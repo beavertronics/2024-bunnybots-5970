@@ -1,5 +1,6 @@
 package frc.robot.subsystems
 
+import beaverlib.utils.Units.Linear.VelocityUnit
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
 import com.revrobotics.RelativeEncoder
@@ -13,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 // import frc.engine.utils.`M/s`
 import beaverlib.utils.Units.Linear.metersPerSecond
 import frc.robot.subsystems.Odometry.chassisSpeeds
-
 
 object Drivetrain : SubsystemBase() {
 
@@ -98,7 +98,7 @@ object Drivetrain : SubsystemBase() {
      * @param left Desired speed for the left motors, in M/s
      * @param right Desired speed for the right motors, in M/s
      */
-    fun closedLoopDrive(left: `M/s`, right: `M/s`) { closedLoopDrive(left.value, right.value) }
+    fun closedLoopDrive(left: VelocityUnit, right: VelocityUnit) { closedLoopDrive(left.asMetersPerSecond, right.asMetersPerSecond) }
     fun closedLoopDrive(speeds: ChassisSpeeds){
         val kinematics = DifferentialDriveKinematics(DriveConstants.TrackWidth.value)
         val wheelSpeeds: DifferentialDriveWheelSpeeds = kinematics.toWheelSpeeds(chassisSpeeds)
