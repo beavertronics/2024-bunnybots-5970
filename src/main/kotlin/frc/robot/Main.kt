@@ -3,7 +3,6 @@ package frc.robot
 import edu.wpi.first.hal.FRCNetComm
 import edu.wpi.first.hal.HAL
 import edu.wpi.first.wpilibj.RobotBase
-
 /*
 Go to RobotController.kt unless you know what you're doing.
 :D
