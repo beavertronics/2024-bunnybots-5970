@@ -15,6 +15,18 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import beaverlib.utils.Units.Linear.metersPerSecond
 import frc.robot.subsystems.Odometry.chassisSpeeds
 
+object DriveConstants {
+    const val MotorLMainID = 0 // todo
+    const val MotorLSubID = 0 // todo
+    const val MotorRMainID = 0 // todo
+    const val MotorRSubID = 0 // todo
+    const val KP = 0.0 // todo
+    const val KS = 0.0 // todo
+    const val KD = 0.0 // todo
+    const val KV = 0.0 // todo
+    const val KA = 0.0 // todo
+    const val CurrentLimit = 0 // todo
+}
 object Drivetrain : SubsystemBase() {
 
     private val       leftMain = CANSparkMax(DriveConstants.MotorLMainID, CANSparkLowLevel.MotorType.kBrushless)
@@ -100,7 +112,7 @@ object Drivetrain : SubsystemBase() {
      */
     fun closedLoopDrive(left: VelocityUnit, right: VelocityUnit) { closedLoopDrive(left.asMetersPerSecond, right.asMetersPerSecond) }
     fun closedLoopDrive(speeds: ChassisSpeeds){
-        val kinematics = DifferentialDriveKinematics(DriveConstants.TrackWidth.value)
+        val kinematics = DifferentialDriveKinematics(OdometryConstants.TrackWidth.asMeters)
         val wheelSpeeds: DifferentialDriveWheelSpeeds = kinematics.toWheelSpeeds(chassisSpeeds)
         closedLoopDrive(wheelSpeeds.leftMetersPerSecond,wheelSpeeds.rightMetersPerSecond)
     }

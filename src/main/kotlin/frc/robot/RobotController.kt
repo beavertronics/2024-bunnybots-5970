@@ -7,7 +7,6 @@ import edu.wpi.first.cameraserver.CameraServer
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.RunCommand
-import frc.robot.Commands.OHGODTHEYGAVEUS2MINUTESTOTESTATCOMP_auto
 
 import frc.robot.commands.TeleOp
 import frc.robot.subsystems.Drivetrain

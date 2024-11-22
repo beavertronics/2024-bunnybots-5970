@@ -29,8 +29,9 @@ object TeleOp : Command() {
     }
 
     object OI {
-        private val driverController    = XboxController(0)
-        private val operatorController  = Joystick(1)
+        private val leftDriverController = Joystick(0)
+        private val rightDriverController = Joystick(1)
+        private val OperatorController = XboxController(2)
 
         private fun Double.processInput(deadzone : Double = 0.1, squared : Boolean = false, cubed : Boolean = false, readjust : Boolean = true) : Double{
             var processed = this
@@ -47,3 +48,106 @@ object TeleOp : Command() {
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// uwu
