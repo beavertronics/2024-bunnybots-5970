@@ -52,6 +52,7 @@ object ToteGrabber : SubsystemBase() {
     private var lastTick = false
 
     var setpoint = pos()
+    var goal : TrapezoidProfile.State? = null
 
     private const val UPPER_SOFT_STOP = 1.95
     val LOWER_SOFT_STOP = 9.429947216.degreesToRadians()
@@ -69,12 +70,14 @@ object ToteGrabber : SubsystemBase() {
 
     val profileTimer = Timer()
 
-    val constraints = TrapezoidProfile.Constraints(
-        ToteConstants.ARM_MAXSPEED,
-        ToteConstants.ARM_MAXACCEL
-    )
     private val pid = PIDController(0.0, 0.0, 0.0)
-    var profile: TrapezoidProfile? = null
+
+    var profile: TrapezoidProfile = TrapezoidProfile(
+        TrapezoidProfile.Constraints(
+            ToteConstants.ARM_MAXSPEED,
+            ToteConstants.ARM_MAXACCEL
+        )
+    )
     private val integral = MovingAverage(50)
 
     init {
@@ -129,16 +132,20 @@ object ToteGrabber : SubsystemBase() {
         if (setpoint == 0.0 ||
             setpoint !in LOWER_SOFT_STOP..UPPER_SOFT_STOP ||
             ((p - setpoint).absoluteValue < 0.05 && rate.absoluteValue < 0.1) ||
-            profileTimer.get() > (profile?.totalTime() ?: 0.0))
+            profile.isFinished(profileTimer.get()))
         {
-            profile = null
+            goal = null
         }
 
 
 
         var output = 0.0
-        if (profile != null) {
-            val targetSpeed = profile?.calculate(profileTimer.get())?.velocity ?: 0.0
+        if (goal != null) {
+            val targetSpeed = profile?.calculate(
+                profileTimer.get(),
+                        goal,
+                        TrapezoidProfile.State(pos(), velocityAverage.average)
+            )?.velocity ?: 0.0
             SmartDashboard.putNumber("arm target speed", targetSpeed)
 
             var output = pid.calculate(rate, targetSpeed)
@@ -163,19 +170,16 @@ object ToteGrabber : SubsystemBase() {
         if (newPos !in LOWER_SOFT_STOP..UPPER_SOFT_STOP) return
 //        currentGoal = newPos
         setpoint = newPos
-        profile = TrapezoidProfile(constraints,
-            TrapezoidProfile.State(newPos, 0.0),
-            TrapezoidProfile.State(pos(), velocityAverage.average)
-        )
+        goal = TrapezoidProfile.State(newPos, 0.0)
         profileTimer.restart()
     }
 
     fun stop() {
-        profile = null
+        goal = null
     }
 
     fun isMoving(): Boolean {
-        return profile != null
+        return goal != null
     }
 
     override fun initSendable(builder: SendableBuilder) {
