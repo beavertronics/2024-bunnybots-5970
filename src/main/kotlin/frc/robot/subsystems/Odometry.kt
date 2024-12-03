@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.subsystems.Drivetrain
-import beaverlib.odometry.Vision
+// import beaverlib.odometry.Vision Unused and causes compilation to fail when not commented out
 import beaverlib.utils.Units.Angular.AngleUnit
 import beaverlib.utils.Units.Linear.Acceleration
 import beaverlib.utils.Units.Linear.DistanceUnit
