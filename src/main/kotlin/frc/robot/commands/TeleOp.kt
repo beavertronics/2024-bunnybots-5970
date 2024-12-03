@@ -16,7 +16,7 @@ import frc.robot.subsystems.Intake
 object TeleOp : Command() {
 
     override fun initialize() {
-        addRequirements(Drivetrain/*,Intake,Shooter*/)
+        addRequirements(Drivetrain,Intake/*,Tote Grab,Vision??*/)
     }
 
     override fun execute() {

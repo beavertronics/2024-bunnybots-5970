@@ -6,8 +6,9 @@ import edu.wpi.first.wpilibj.Solenoid
 import frc.engine.utils.initMotorControllers
 import com.revrobotics.CANSparkMax
 import com.revrobotics.CANSparkLowLevel.MotorType
+import edu.wpi.first.wpilibj2.command.SubsystemBase
 
-object Intake {
+object Intake : SubsystemBase() {
 
     val intakeMotor   = CANSparkMax(10,MotorType.kBrushed)   // todo fix ID, 775 brushed motor
     val conveyorMotor = CANSparkMax(11,MotorType.kBrushless) // todo fix ID, neo550
