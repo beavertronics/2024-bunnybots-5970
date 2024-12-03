@@ -25,7 +25,7 @@ import beaverlib.utils.Units.Linear.metersPerSecond
 
 object OdometryConstants {
 
-    val TrackWidth = 1000000000000000000.meters // TODO
+    val TrackWidth = 23.13.meters // Taken from CAD
 }
 
 
