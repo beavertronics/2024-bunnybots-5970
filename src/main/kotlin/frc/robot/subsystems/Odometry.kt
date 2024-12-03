@@ -20,12 +20,12 @@ import frc.robot.subsystems.Drivetrain
 import beaverlib.utils.Units.Angular.AngleUnit
 import beaverlib.utils.Units.Linear.Acceleration
 import beaverlib.utils.Units.Linear.DistanceUnit
-import beaverlib.utils.Units.Linear.meters
+import beaverlib.utils.Units.Linear.inches
 import beaverlib.utils.Units.Linear.metersPerSecond
 
 object OdometryConstants {
 
-    val TrackWidth = 23.13.meters // Taken from CAD
+    val TrackWidth = (23.13).inches // Taken from CAD
 }
 
 
