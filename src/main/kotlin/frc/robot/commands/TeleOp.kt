@@ -10,37 +10,66 @@ import kotlin.math.*
 import frc.robot.subsystems.Drivetrain
 import frc.robot.subsystems.Intake
 
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard
+import edu.wpi.first.wpilibj.drive.DifferentialDrive
 
 //TeleOp Code- Controls the robot based off of inputs from the humans operating the Driver Station.
 
 object TeleOp : Command() {
 
+    val intakeSpeed = 3.volts   // todo fix voltage amount
+    val conveyorSpeed = 3.volts // todo fix voltage amount
+
+    val childMaxPower = 0.8 //This is a percentage (0.8 = child mode is 80% of normal power)
+    // TODO: Fix max child speed
+
+    //This is the code that makes the child mode switch show up on Shuffleboard
+    var childModeSwitch = Shuffleboard.getTab("Main")
+        .add("Child Mode", false)
+        .withWidget(BuiltInWidgets.kToggleSwitch)
+        .getEntry();
+
     override fun initialize() {
         addRequirements(Drivetrain,Intake/*,Tote Grab,Vision??*/)
     }
-
     override fun execute() {
-        // invert driving direction if trigger pressed
-        if (OI.rightJoystickTrigger) Drivetrain.tankDrive(OI.leftJoystickMovementValue, OI.rightJoystickMovementValue)
-        else Drivetrain.tankDrive(OI.leftJoystickMovementValue * -1.0, OI.rightJoystickMovementValue * -1.0)
+
+        //===== DRIVETRAIN =====//
+        val isChildMode = childModeSwitch.getBoolean(/*Default if childmodeswitch can't be found:*/false);
+ 
+        var power = 1.0; //True max power
+        if (isChildMode) power = power * childMaxPower;
+    
+        //If in child mode and child is not allowed to go, give control to supervisor
+        if (isChildMode && (!OI.childCanGo)) {
+            val speeds = DifferentialDrive.arcadeDriveIK(OI.supervisorDriveSpeed, OI.supervisorDriveTurn, false)
+            Drivetrain.tankDrive(speeds.left, speeds.right)
+        } else {
+
+            //Otherwise use normal controls for drivetrain
+            if (OI.quickReverse) Drivetrain.tankDrive(OI.leftSideDrive * power * -1.0, OI.rightSideDrive * power * -1.0)
+            else Drivetrain.tankDrive(OI.leftSideDrive * power, OI.rightSideDrive* power)
+        }
+        //===== SUBSYSTEMS =====//
 
         // run intake in one direction or the other
-        if (OI.runIntakeDirection > 0.01) Intake.runIntake(3.volts) // todo fix voltage amount
-        else if (OI.runIntakeDirection < -0.01) Intake.runIntake((3 * -1).volts) // todo fix voltage amount
-        if (OI.runConveyorDirection > 0.01) Intake.runConveyor(3.volts) // todo fix voltage amount
-        else if (OI.runConveyorDirection > -0.01) Intake.runConveyor((3 * -1).volts) // todo fix voltage amount
-
+        if (OI.runIntakeDirection.absoluteValue > 0.01) Intake.runIntake(intakeSpeed * OI.runIntakeDirection.sign) //Run the intake at the correct speed and in the correct direction
+        if (OI.runConveyorDirection.absoluteValue > 0.01) Intake.runConveyor(intakeSpeed * OI.runIntakeDirection.sign)
+        
         // move intake up and down if button pressed
+        // If both buttons are pressed, intake will be raised.
         if (OI.raiseIntake) Intake.raiseIntake()
         else if (OI.lowerIntake) Intake.lowerIntake()
     }
 
     // operator interface
     object OI {
-        private val leftDriverController = Joystick(0)
-        private val rightDriverController = Joystick(1)
-        private val OperatorController = XboxController(2)
+        private val leftJoystick = Joystick(0) //These numbers correspond to the USB order in the Driver Station App
+        private val rightJoystick = Joystick(1)
+        private val controller = XboxController(2)
 
+        // Allows you to tweak controller inputs (ie get rid of deadzone, make input more sensitive by squaring or cubing it, etc)
         private fun Double.processInput(deadzone : Double = 0.1, squared : Boolean = false, cubed : Boolean = false, readjust : Boolean = true) : Double{
             var processed = this
             if(readjust) processed = ((this.absoluteValue - deadzone)/(1 - deadzone))*this.sign
@@ -55,13 +84,23 @@ object TeleOp : Command() {
             return this.absoluteValue > target
         }
 
-        val leftJoystickMovementValue get() = leftDriverController.y.processInput()
-        val rightJoystickMovementValue get() = rightDriverController.y.processInput()
-        val rightJoystickTrigger get() = rightDriverController.triggerPressed
-        val runIntakeDirection get() = OperatorController.rightY
-        val runConveyorDirection get() = OperatorController.leftY
-        val lowerIntake get() = OperatorController.yButtonPressed
-        val raiseIntake get() = OperatorController.aButtonPressed
+        // ROBOT CONTROL BINDINGS!
+
+        //Drive
+        val leftSideDrive get() = leftJoystick.y.processInput()
+        val rightSideDrive get() = rightJoystick.y.processInput()
+        val quickReverse get() = rightJoystick.triggerPressed
+
+        //Subsystems
+        val runIntakeDirection get() = controller.rightY   //
+        val runConveyorDirection get() = controller.rightY // Both use rightY so intake and conveyor both run at once
+        val lowerIntake get() = controller.yButtonPressed
+        val raiseIntake get() = controller.aButtonPressed
+
+        //Child mode (Assumes child is at the flight joysticks and supervisor is on controller)
+        val childCanGo get() = (controller.leftTriggerAxis > 0.2)
+        val supervisorDriveSpeed get() = controller.leftY
+        val supervisorDriveTurn get() = controller.leftX
     }
 }
 
