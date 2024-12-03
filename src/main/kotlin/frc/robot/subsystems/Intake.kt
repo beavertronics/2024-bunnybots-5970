@@ -4,11 +4,13 @@ import beaverlib.utils.Units.Electrical.VoltageUnit
 import edu.wpi.first.wpilibj.PneumaticsModuleType
 import edu.wpi.first.wpilibj.Solenoid
 import frc.engine.utils.initMotorControllers
+import com.revrobotics.CANSparkMax
+import com.revrobotics.CANSparkLowLevel.MotorType
 
 object Intake {
 
-    val intakeMotor = BeaverTalonSRX(10) // todo fix ID, unknown motor
-    val conveyorMotor = BeaverTalonSRX(11) // todo fix ID, neo550
+    val intakeMotor   = CANSparkMax(10,MotorType.kBrushed)   // todo fix ID, 775 brushed motor
+    val conveyorMotor = CANSparkMax(11,MotorType.kBrushless) // todo fix ID, neo550
     val leftIntakeSolonoid = Solenoid(PneumaticsModuleType.CTREPCM, 0) // todo, fix channel
     val rightIntakeSolonoid = Solenoid(PneumaticsModuleType.CTREPCM, 1) // todo, fix channel
 
