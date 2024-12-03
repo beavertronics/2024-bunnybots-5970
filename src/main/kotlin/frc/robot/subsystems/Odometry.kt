@@ -53,17 +53,9 @@ object Odometry : SubsystemBase(), PoseProvider {
     val field = Field2d()
     val initial = Pose2d(11.789039, 0.74, Rotation2d.fromDegrees(0.0))
 
-    init {
-
-    }
-
     fun zero() {
 //        val initial = Pose2d(0.0, 0.0, Rotation2d.fromDegrees(180.0))
         reset(initial)
-    }
-
-    override fun periodic() {
-        update()
     }
 
     override fun reset(x: DistanceUnit, y: DistanceUnit, theta: AngleUnit) {
@@ -72,7 +64,9 @@ object Odometry : SubsystemBase(), PoseProvider {
         encoderOnly.resetPosition(navx.rotation2d, Drivetrain.leftEncoder.position, Drivetrain.rightEncoder.position, p)
     }
 
-    override fun update() {
+    override fun periodic() { 
+        //Updates vision subsystem
+
 //        val visionMeasurements = vision.getEstimatedPose(pose)
 //        if(visionMeasurements != null){
 ////            visionProvider.setVisionMeasurementStdDevs(Constants.OdometryConstants.VisionDeviation)
