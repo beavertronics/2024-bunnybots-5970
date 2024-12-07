@@ -78,11 +78,6 @@ object TeleOp : Command() {
         val runConveyorDirection get() = controller.rightY // Both use rightY so intake and conveyor both run at once
         val lowerIntake get() = controller.yButtonPressed
         val raiseIntake get() = controller.aButtonPressed
-
-        //Child mode (Assumes child is at the flight joysticks and supervisor is on controller)
-        val childCanGo get() = (controller.leftTriggerAxis > 0.2)
-        val supervisorDriveSpeed get() = controller.leftY
-        val supervisorDriveTurn get() = controller.leftX
     }
 }
 
