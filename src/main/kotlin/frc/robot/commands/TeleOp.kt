@@ -21,36 +21,18 @@ object TeleOp : Command() {
     val intakeSpeed = 3.volts   // todo fix voltage amount
     val conveyorSpeed = 3.volts // todo fix voltage amount
 
-    val childMaxPower = 0.8 //This is a percentage (0.8 = child mode is 80% of normal power)
-    // TODO: Fix max child speed
-
-    //This is the code that makes the child mode switch show up on Shuffleboard
-    var childModeSwitch = Shuffleboard.getTab("Main")
-        .add("Child Mode", false)
-        .withWidget(BuiltInWidgets.kToggleSwitch)
-        .getEntry();
-
     override fun initialize() {
         addRequirements(Drivetrain,Intake/*,Tote Grab,Vision??*/)
     }
     override fun execute() {
 
         //===== DRIVETRAIN =====//
-        val isChildMode = childModeSwitch.getBoolean(/*Default if childmodeswitch can't be found:*/false);
- 
         var power = 1.0; //True max power
-        if (isChildMode) power = power * childMaxPower;
-    
-        //If in child mode and child is not allowed to go, give control to supervisor
-        if (isChildMode && (!OI.childCanGo)) {
-            val speeds = DifferentialDrive.arcadeDriveIK(OI.supervisorDriveSpeed, OI.supervisorDriveTurn, false)
-            Drivetrain.tankDrive(speeds.left, speeds.right)
-        } else {
 
-            //Otherwise use normal controls for drivetrain
-            if (OI.quickReverse) Drivetrain.tankDrive(OI.leftSideDrive * power * -1.0, OI.rightSideDrive * power * -1.0)
-            else Drivetrain.tankDrive(OI.leftSideDrive * power, OI.rightSideDrive* power)
-        }
+        //Otherwise use normal controls for drivetrain
+        if (OI.quickReverse) Drivetrain.tankDrive(OI.leftSideDrive * power * -1.0, OI.rightSideDrive * power * -1.0)
+        else Drivetrain.tankDrive(OI.leftSideDrive * power, OI.rightSideDrive* power)
+
         //===== SUBSYSTEMS =====//
 
         // run intake in one direction or the other
@@ -96,11 +78,6 @@ object TeleOp : Command() {
         val runConveyorDirection get() = controller.rightY // Both use rightY so intake and conveyor both run at once
         val lowerIntake get() = controller.yButtonPressed
         val raiseIntake get() = controller.aButtonPressed
-
-        //Child mode (Assumes child is at the flight joysticks and supervisor is on controller)
-        val childCanGo get() = (controller.leftTriggerAxis > 0.2)
-        val supervisorDriveSpeed get() = controller.leftY
-        val supervisorDriveTurn get() = controller.leftX
     }
 }
 
