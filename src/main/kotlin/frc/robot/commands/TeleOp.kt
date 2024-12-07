@@ -7,14 +7,14 @@ import edu.wpi.first.wpilibj2.command.Command
 
 import kotlin.math.*
 
-import frc.robot.subsystems.Drivetrain
+//import frc.robot.subsystems.Drivetrain
 import frc.robot.subsystems.Intake
 
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard
 import edu.wpi.first.wpilibj.drive.DifferentialDrive
 
-//TeleOp Code- Controls the robot based off of inputs from the humans operating the Driver Station.
+//TeleOp Code - Controls the robot based off of inputs from the humans operating the Driver Station.
 
 object TeleOp : Command() {
 
@@ -31,7 +31,7 @@ object TeleOp : Command() {
         .getEntry();
 
     override fun initialize() {
-        addRequirements(Drivetrain,Intake/*,Tote Grab,Vision??*/)
+//        addRequirements(Drivetrain,Intake/*,Tote Grab,Vision??*/)
     }
     override fun execute() {
 
@@ -42,15 +42,15 @@ object TeleOp : Command() {
         if (isChildMode) power = power * childMaxPower;
     
         //If in child mode and child is not allowed to go, give control to supervisor
-        if (isChildMode && (!OI.childCanGo)) {
-            val speeds = DifferentialDrive.arcadeDriveIK(OI.supervisorDriveSpeed, OI.supervisorDriveTurn, false)
-            Drivetrain.tankDrive(speeds.left, speeds.right)
-        } else {
-
-            //Otherwise use normal controls for drivetrain
-            if (OI.quickReverse) Drivetrain.tankDrive(OI.leftSideDrive * power * -1.0, OI.rightSideDrive * power * -1.0)
-            else Drivetrain.tankDrive(OI.leftSideDrive * power, OI.rightSideDrive* power)
-        }
+//        if (isChildMode && (!OI.childCanGo)) {
+//            val speeds = DifferentialDrive.arcadeDriveIK(OI.supervisorDriveSpeed, OI.supervisorDriveTurn, false)
+//            Drivetrain.tankDrive(speeds.left, speeds.right)
+//        } else {
+//
+//            //Otherwise use normal controls for drivetrain
+//            if (OI.quickReverse) Drivetrain.tankDrive(OI.leftSideDrive * power * -1.0, OI.rightSideDrive * power * -1.0)
+//            else Drivetrain.tankDrive(OI.leftSideDrive * power, OI.rightSideDrive* power)
+//        }
         //===== SUBSYSTEMS =====//
 
         // run intake in one direction or the other
