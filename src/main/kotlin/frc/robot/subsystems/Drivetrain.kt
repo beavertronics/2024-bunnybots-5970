@@ -16,10 +16,10 @@ import beaverlib.utils.Units.Linear.metersPerSecond
 import frc.robot.subsystems.Odometry.chassisSpeeds
 
 object DriveConstants {
-    const val MotorLMainID = 0 // todo
-    const val MotorLSubID = 0 // todo
-    const val MotorRMainID = 0 // todo
-    const val MotorRSubID = 0 // todo
+    const val MotorLMainID = 29
+    const val MotorLSubID = 30
+    const val MotorRMainID = 22
+    const val MotorRSubID = 24
     const val KP = 0.0 // todo
     const val KS = 0.0 // todo
     const val KD = 0.0 // todo
