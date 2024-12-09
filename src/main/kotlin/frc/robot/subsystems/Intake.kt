@@ -1,5 +1,4 @@
 package frc.robot.subsystems
-import beaverlib.controls.BeaverTalonSRX
 import beaverlib.utils.Units.Electrical.VoltageUnit
 import edu.wpi.first.wpilibj.PneumaticsModuleType
 import edu.wpi.first.wpilibj.Solenoid
@@ -10,8 +9,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 
 object Intake : SubsystemBase() {
 
-    val intakeMotor   = CANSparkMax(10,MotorType.kBrushed)   // todo fix ID, 775 brushed motor
-    val conveyorMotor = CANSparkMax(11,MotorType.kBrushless) // todo fix ID, neo550 brushless motor
+    val intakeMotor   = CANSparkMax(13,MotorType.kBrushed)   // 775 brushed motor
+    val conveyorMotor = CANSparkMax(23,MotorType.kBrushless) // neo550 brushless motor
     val leftIntakeSolonoid = Solenoid(PneumaticsModuleType.CTREPCM, 0) // todo, fix channel
     val rightIntakeSolonoid = Solenoid(PneumaticsModuleType.CTREPCM, 1) // todo, fix channel
 

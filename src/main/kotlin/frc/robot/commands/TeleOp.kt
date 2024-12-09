@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard
 import edu.wpi.first.wpilibj.drive.DifferentialDrive
 
-//TeleOp Code- Controls the robot based off of inputs from the humans operating the Driver Station.
+//TeleOp Code - Controls the robot based off of inputs from the humans operating the Driver Station.
 
 object TeleOp : Command() {
 
@@ -29,18 +29,17 @@ object TeleOp : Command() {
         //===== DRIVETRAIN =====//
         var power = 1.0; //True max power
 
-        //Otherwise use normal controls for drivetrain
+        // drivetrain controls
         if (OI.quickReverse) Drivetrain.tankDrive(OI.leftSideDrive * power * -1.0, OI.rightSideDrive * power * -1.0)
         else Drivetrain.tankDrive(OI.leftSideDrive * power, OI.rightSideDrive* power)
 
         //===== SUBSYSTEMS =====//
-
         // run intake in one direction or the other
         if (OI.runIntakeDirection.absoluteValue > 0.01) Intake.runIntake(intakeSpeed * OI.runIntakeDirection.sign) //Run the intake at the correct speed and in the correct direction
-        if (OI.runConveyorDirection.absoluteValue > 0.01) Intake.runConveyor(intakeSpeed * OI.runIntakeDirection.sign)
+        if (OI.runConveyorDirection.absoluteValue > 0.01) Intake.runConveyor(conveyorSpeed * OI.runConveyorDirection.sign)
         
         // move intake up and down if button pressed
-        // If both buttons are pressed, intake will be raised.
+        // if both buttons are pressed, intake will be raised.
         if (OI.raiseIntake) Intake.raiseIntake()
         else if (OI.lowerIntake) Intake.lowerIntake()
     }
