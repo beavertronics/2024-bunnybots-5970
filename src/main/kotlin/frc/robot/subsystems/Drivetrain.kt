@@ -25,7 +25,7 @@ object DriveConstants {
     const val KD = 0.0 // todo
     const val KV = 0.0 // todo
     const val KA = 0.0 // todo
-    const val CurrentLimit = 0 // todo
+    const val CurrentLimit = 40
 }
 object Drivetrain : SubsystemBase() {
 

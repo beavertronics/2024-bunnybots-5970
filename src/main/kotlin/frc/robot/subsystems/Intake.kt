@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 
 object Intake : SubsystemBase() {
 
-    val intakeMotor   = CANSparkMax(13,MotorType.kBrushed)   // 775 brushed motor
-    val conveyorMotor = CANSparkMax(23,MotorType.kBrushless) // neo550 brushless motor
+    val intakeMotor   = CANSparkMax(0,MotorType.kBrushed)   // todo, 775 brushed motor
+    val conveyorMotor = CANSparkMax(0,MotorType.kBrushless) // todo, neo550 brushless motor
     val leftIntakeSolonoid = Solenoid(PneumaticsModuleType.CTREPCM, 0) // todo, fix channel
     val rightIntakeSolonoid = Solenoid(PneumaticsModuleType.CTREPCM, 1) // todo, fix channel
 
