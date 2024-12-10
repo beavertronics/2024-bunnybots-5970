@@ -36,13 +36,20 @@ object TeleOp : Command() {
 
         //===== SUBSYSTEMS =====//
         // run intake in one direction or the other
-        if (OI.runIntakeDirection.absoluteValue > 0.01) Intake.runIntake(intakeSpeed * OI.runIntakeDirection.sign) //Run the intake at the correct speed and in the correct direction
-        if (OI.runConveyorDirection.absoluteValue > 0.01) Intake.runConveyor(conveyorSpeed * OI.runConveyorDirection.sign)
+        if (OI.runIntakeDirection.absoluteValue > 0.01) {
+            if(OI.runIntakeDirection < 0) {
+                Intake.runConveyor(conveyorSpeed * 0.25)
+                Intake.runIntake(intakeSpeed)
+            }
+            else if(OI.runIntakeDirection > 0) Intake.runConveyor(-conveyorSpeed * OI.runIntakeDirection)
+        } //Run the intake at the correct speed and in the correct direction
+        if (OI.Deposit) Intake.runConveyor(conveyorSpeed)
         
         // move intake up and down if button pressed
         // if both buttons are pressed, intake will be raised.
         if (OI.raiseIntake) Intake.raiseIntake()
         else if (OI.lowerIntake) Intake.lowerIntake()
+
     }
 
     // operator interface
@@ -75,7 +82,7 @@ object TeleOp : Command() {
 
         //Subsystems
         val runIntakeDirection get() = controller.rightY   //
-        val runConveyorDirection get() = controller.rightY // Both use rightY so intake and conveyor both run at once
+        val Deposit get() = controller.bButton // Both use rightY so intake and conveyor both run at once
         val lowerIntake get() = controller.yButtonPressed
         val raiseIntake get() = controller.aButtonPressed
     }
