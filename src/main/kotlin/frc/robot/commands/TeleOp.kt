@@ -9,6 +9,7 @@ import kotlin.math.*
 
 import frc.robot.subsystems.Drivetrain
 import frc.robot.subsystems.Intake
+import frc.robot.subsystems.ToteGrabber
 
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard
@@ -22,7 +23,7 @@ object TeleOp : Command() {
     val conveyorSpeed = 3.volts // todo fix voltage amount
 
     override fun initialize() {
-        addRequirements(Drivetrain,Intake/*,Tote Grab,Vision??*/)
+        addRequirements(Drivetrain, Intake, ToteGrabber)
     }
     override fun execute() {
 

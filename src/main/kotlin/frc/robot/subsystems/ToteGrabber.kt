@@ -1,4 +1,4 @@
-package com.team2898.robot.subsystems
+package frc.robot.subsystems
 
 import beaverlib.controls.BeaverSparkMax
 import beaverlib.utils.MovingAverage
