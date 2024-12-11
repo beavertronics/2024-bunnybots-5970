@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand
 
 import frc.robot.commands.TeleOp
 import frc.robot.commands.CringeTote
+import frc.robot.commands.CringeFloorBunny
 import frc.robot.subsystems.Drivetrain
 
 /* Main code for controlling the robot. Mainly just links everything together.
@@ -41,6 +42,7 @@ object RobotController : TimedRobot() {
     override fun autonomousInit() {
         //Uncomment this out when ready to test auto
         // CringeTote.schedule()
+        // CringeFloorBunny.schedule()
     }
     override fun autonomousPeriodic() {} //TODO: Unnecesary with command-based programming?
 
