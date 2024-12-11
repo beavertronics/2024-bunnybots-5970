@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 // import frc.engine.utils.`M/s`
 import beaverlib.utils.Units.Linear.metersPerSecond
-import frc.robot.subsystems.Odometry.chassisSpeeds
 import beaverlib.utils.Units.Electrical.VoltageUnit
 
 import edu.wpi.first.wpilibj2.command.Commands
@@ -117,7 +116,7 @@ object Drivetrain : SubsystemBase() {
     fun closedLoopDrive(left: VelocityUnit, right: VelocityUnit) { closedLoopDrive(left.asMetersPerSecond, right.asMetersPerSecond) }
     fun closedLoopDrive(speeds: ChassisSpeeds){
         val kinematics = DifferentialDriveKinematics(OdometryConstants.TrackWidth.asMeters)
-        val wheelSpeeds: DifferentialDriveWheelSpeeds = kinematics.toWheelSpeeds(chassisSpeeds)
+        val wheelSpeeds: DifferentialDriveWheelSpeeds = kinematics.toWheelSpeeds(speeds)
         closedLoopDrive(wheelSpeeds.leftMetersPerSecond,wheelSpeeds.rightMetersPerSecond)
     }
     val consumeDrive: (ChassisSpeeds) -> Unit = {
