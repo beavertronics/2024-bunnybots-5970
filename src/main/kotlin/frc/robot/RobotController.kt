@@ -23,11 +23,13 @@ import frc.robot.subsystems.Drivetrain
 
 object RobotController : TimedRobot() {
 
-    val autos: Map<String,Command> = mapOf(
+    // Currently unused
+    //val autos: Map<String,Command> = mapOf(
         //TODO: Autos go here!
         //ie 
         //"Description of auto" to TaxiAuto
-    )    
+    //)    
+
     override fun robotInit() {
         //Initialize the robot!
         CameraServer.startAutomaticCapture() //TODO: Can we offload camera streaming to a Raspberry Pi? Should we?
