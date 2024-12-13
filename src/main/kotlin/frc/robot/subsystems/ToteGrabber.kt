@@ -3,6 +3,7 @@ package frc.robot.subsystems
 import beaverlib.controls.BeaverSparkMax
 import beaverlib.utils.MovingAverage
 import beaverlib.utils.Sugar.degreesToRadians
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal
 import com.revrobotics.CANSparkBase
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
@@ -21,7 +22,7 @@ import kotlin.math.absoluteValue
 import kotlin.math.sin
 
 object ToteConstants {
-    const val ToteGrabberMotorID = 0 //todo
+    const val ToteGrabberMotorID = 13 //todo
     const val ARM_MAXSPEED = 1.0 //todo
     const val ARM_MAXACCEL = 1.5 //todo
     const val ARM_RAISED_KSIN = 2.0 //todo
@@ -48,7 +49,9 @@ object ToteGrabber : SubsystemBase() {
     private val armMotor = CANSparkMax(ToteConstants.ToteGrabberMotorID, CANSparkLowLevel.MotorType.kBrushless)
 //    private val brakeSolenoid = DoubleSolenoid(PNUEMATICS_MODULE, PNEUMATICS_MODULE_TYPE, DISK_BRAKE_FORWARD, DISK_BRAKE_BACKWARD)
     private val encoder = armMotor.encoder
-//    private val limitSwitch = DigitalInput(ARM_LIMIT_SWITCH)
+    private val lowerLimitSwitch = DigitalInput(0)
+    private val upperLimitSwitch = DigitalInput(1)
+
     private var lastTick = false
 
     var setpoint = pos()
@@ -97,30 +100,28 @@ object ToteGrabber : SubsystemBase() {
     override fun periodic() {
         SmartDashboard.putNumber("arm current", armMotor.outputCurrent)
         SmartDashboard.putNumber("arm duty cycle", armMotor.appliedOutput)
-        ks = SmartDashboard.getNumber("arm ks", ks)
-        ksin = SmartDashboard.getNumber("arm ksin", ksin)
-        kv = SmartDashboard.getNumber("arm kv", kv)
 
-//        val currentTick = limitSwitch.get()
-//        lastTick = limitSwitch.get()
-        val currentTick = false
 
+//        if (lowerLimitSwitch.get()) {
+//            encoder.position = 0.0
+//        }
+        /** Position */
         val p = pos()
-        //Change in position
+        /** Change in position */
         val dp = p - last
         last = p
-        //Change in time
+        /** Change in time */
         val dt = timer.get()
         timer.restart()
         // Add the velocity to the moving average
         velocityAverage.add(dp / dt)
-        // Get averages
+        /** Average velocity */
         val rate = velocityAverage.average
 
         integral.add((rate - armMotor.encoder.velocity).absoluteValue)
 
 //        SmartDashboard.putNumber("arm encoder difference", integral.average * integral.size)
-
+        // If stopped, set the motor to zero and return so no other code is run
         if (stopped) {
             println("STOPPED")
             armMotor.set(0.0)
@@ -129,6 +130,10 @@ object ToteGrabber : SubsystemBase() {
 
         pid.p = SmartDashboard.getNumber("arm kp", 0.0)
         pid.d = SmartDashboard.getNumber("arm kd", 0.0)
+        ks = SmartDashboard.getNumber("arm ks", ks)
+        ksin = SmartDashboard.getNumber("arm ksin", ksin)
+        kv = SmartDashboard.getNumber("arm kv", kv)
+
         if (setpoint == 0.0 ||
             setpoint !in LOWER_SOFT_STOP..UPPER_SOFT_STOP ||
             ((p - setpoint).absoluteValue < 0.05 && rate.absoluteValue < 0.1) ||
@@ -148,17 +153,17 @@ object ToteGrabber : SubsystemBase() {
             )?.velocity ?: 0.0
             SmartDashboard.putNumber("arm target speed", targetSpeed)
 
-            var output = pid.calculate(rate, targetSpeed)
+            output = pid.calculate(rate, targetSpeed)
             output += kv * targetSpeed
             output += ks + sin(p) * ksin
         }
 
 
 
-        if (p > UPPER_SOFT_STOP) {
+        if (p > UPPER_SOFT_STOP || upperLimitSwitch.get()) {
             output = output.coerceAtMost(0.0)
             println("UPPER SOFT STOP")
-        } else if (p < LOWER_SOFT_STOP || currentTick) {
+        } else if (p < LOWER_SOFT_STOP || lowerLimitSwitch.get()) {
             output = output.coerceAtLeast(0.0)
             println("LOWER SOFT STOP")
         }
