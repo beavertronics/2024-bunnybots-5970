@@ -13,7 +13,9 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 // import frc.engine.utils.`M/s`
 import beaverlib.utils.Units.Linear.metersPerSecond
-import frc.robot.subsystems.Odometry.chassisSpeeds
+import beaverlib.utils.Units.Electrical.VoltageUnit
+
+import edu.wpi.first.wpilibj2.command.Commands
 
 object DriveConstants {
     const val MotorLMainID = 29
@@ -70,6 +72,7 @@ object Drivetrain : SubsystemBase() {
         rightMain.inverted = true
         rightSecondary.inverted = true
         */
+        setDefaultCommand(Commands.run({stop()})) //Don't move unless we tell you to.
     }
     /** Drive by setting left and right power (-1 to 1).
      * @param left Power for left motors [-1.0.. 1.0]. Forward is positive.
@@ -113,10 +116,17 @@ object Drivetrain : SubsystemBase() {
     fun closedLoopDrive(left: VelocityUnit, right: VelocityUnit) { closedLoopDrive(left.asMetersPerSecond, right.asMetersPerSecond) }
     fun closedLoopDrive(speeds: ChassisSpeeds){
         val kinematics = DifferentialDriveKinematics(OdometryConstants.TrackWidth.asMeters)
-        val wheelSpeeds: DifferentialDriveWheelSpeeds = kinematics.toWheelSpeeds(chassisSpeeds)
+        val wheelSpeeds: DifferentialDriveWheelSpeeds = kinematics.toWheelSpeeds(speeds)
         closedLoopDrive(wheelSpeeds.leftMetersPerSecond,wheelSpeeds.rightMetersPerSecond)
     }
     val consumeDrive: (ChassisSpeeds) -> Unit = {
         closedLoopDrive(it)
     }
+
+    // Drive the drivetrain at a specified voltage for specified amount of time.
+    fun driveSeconds(left : VoltageUnit, right : VoltageUnit, secs: Double) 
+    = Commands.run({Drivetrain.tankDrive(left.asVolts,right.asVolts)}, Drivetrain)
+        .withTimeout(secs)
+
+
 }
