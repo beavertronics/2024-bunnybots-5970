@@ -72,7 +72,7 @@ object Drivetrain : SubsystemBase() {
         rightMain.inverted = true
         rightSecondary.inverted = true
         */
-        setDefaultCommand(Commands.run({stop()})) //Don't move unless we tell you to.
+        //setDefaultCommand(Commands.run({stop()})) //Don't move unless we tell you to.
     }
     /** Drive by setting left and right power (-1 to 1).
      * @param left Power for left motors [-1.0.. 1.0]. Forward is positive.

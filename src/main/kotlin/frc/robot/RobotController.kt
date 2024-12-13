@@ -32,7 +32,7 @@ object RobotController : TimedRobot() {
 
     override fun robotInit() {
         //Initialize the robot!
-        CameraServer.startAutomaticCapture() //TODO: Can we offload camera streaming to a Raspberry Pi? Should we?
+        //CameraServer.startAutomaticCapture() //TODO: Can we offload camera streaming to a Raspberry Pi? Should we?
 
     }
     override fun robotPeriodic() {

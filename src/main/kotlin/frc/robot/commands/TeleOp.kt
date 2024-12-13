@@ -8,12 +8,13 @@ import edu.wpi.first.wpilibj2.command.Command
 import kotlin.math.*
 
 import frc.robot.subsystems.Drivetrain
-import frc.robot.subsystems.Intake
-import frc.robot.subsystems.ToteGrabber
+//import frc.robot.subsystems.Intake
+//import frc.robot.subsystems.ToteGrabber
 
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard
 import edu.wpi.first.wpilibj.drive.DifferentialDrive
+import frc.robot.subsystems.Intake
 
 //TeleOp Code - Controls the robot based off of inputs from the humans operating the Driver Station.
 
@@ -23,7 +24,7 @@ object TeleOp : Command() {
     val conveyorSpeed = 3.volts // todo fix voltage amount
 
     override fun initialize() {
-        addRequirements(Drivetrain, Intake, ToteGrabber)
+        addRequirements(Drivetrain, Intake, /*ToteGrabber */)
     }
     override fun execute() {
 
@@ -35,7 +36,7 @@ object TeleOp : Command() {
         else Drivetrain.tankDrive(OI.leftSideDrive * power, OI.rightSideDrive* power)
 
         //===== SUBSYSTEMS =====//
-        // run intake in one direction or the other
+         //run intake in one direction or the other
         if (OI.runIntakeDirection.absoluteValue > 0.01) {
             if(OI.runIntakeDirection < 0) {
                 Intake.runConveyor(conveyorSpeed * 0.25)
@@ -44,11 +45,11 @@ object TeleOp : Command() {
             else if(OI.runIntakeDirection > 0) Intake.runConveyor(-conveyorSpeed * OI.runIntakeDirection)
         } //Run the intake at the correct speed and in the correct direction
         if (OI.Deposit) Intake.runConveyor(conveyorSpeed)
-        
-        // move intake up and down if button pressed
-        // if both buttons are pressed, intake will be raised.
-        if (OI.raiseIntake) Intake.raiseIntake()
-        else if (OI.lowerIntake) Intake.lowerIntake()
+//
+//        // move intake up and down if button pressed
+//        // if both buttons are pressed, intake will be raised.
+//        if (OI.raiseIntake) Intake.raiseIntake()
+//        else if (OI.lowerIntake) Intake.lowerIntake()
 
     }
 
