@@ -4,8 +4,6 @@ import com.revrobotics.CANSparkBase
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
 import edu.wpi.first.util.sendable.SendableBuilder
-import edu.wpi.first.wpilibj.DoubleSolenoid
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.engine.utils.initMotorControllers
 import beaverlib.utils.Units.Electrical.VoltageUnit
@@ -14,7 +12,7 @@ import com.revrobotics.SparkLimitSwitch;
 object ToteGrabber : SubsystemBase() {
 
     private val armMotor = CANSparkMax(13, CANSparkLowLevel.MotorType.kBrushed) // Verified, 775 brushed
-    private val forwardSwitch = armMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed) // Not verified- limit switches may be the other way around and they may be normally open instead of NC
+    private val forwardSwitch = armMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed) // TODO Not verified- limit switches may be the other way around and they may be normally open instead of NC
     private val reverseSwitch = armMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed)
 
     init {

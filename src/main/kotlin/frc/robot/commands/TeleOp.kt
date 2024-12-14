@@ -8,14 +8,12 @@ import edu.wpi.first.wpilibj2.command.Command
 import kotlin.math.*
 
 import frc.robot.subsystems.Drivetrain
-//import frc.robot.subsystems.Intake
-//import frc.robot.subsystems.ToteGrabber
+import frc.robot.subsystems.Intake
+import frc.robot.subsystems.ToteGrabber
 
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard
 import edu.wpi.first.wpilibj.drive.DifferentialDrive
-import frc.robot.subsystems.Intake
-import frc.robot.subsystems.ToteGrabber
 //TeleOp Code - Controls the robot based off of inputs from the humans operating the Driver Station.
 
 object TeleOp : Command() {
@@ -68,6 +66,22 @@ object TeleOp : Command() {
         }
 
         // ROBOT CONTROL BINDINGS!
+        /*
+        General gist of control scheme
+
+        JOYSTICK
+        - Left joystick: drive left side of robot
+        - Right joystick: drive right side of robot
+            - Trigger: Reverses directions to drive
+
+        CONTROLLER
+        - Left joystick: Run intake forwards / backwards
+        - Right joystick: Run tote grab (todo, unsure)
+        - Left trigger: Run conveyor forward (towards tote)
+        - Left bumper: Run conveyor backwards (towards intake)
+        - A button: Raise intake
+        - Y button: Lower intake
+         */
 
         //Drive
         val leftSideDrive get() = leftJoystick.y.processInput()
