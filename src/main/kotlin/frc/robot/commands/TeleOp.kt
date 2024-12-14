@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard
 import edu.wpi.first.wpilibj.drive.DifferentialDrive
 import frc.robot.subsystems.Intake
-
+import frc.robot.subsystems.ToteGrabber
 //TeleOp Code - Controls the robot based off of inputs from the humans operating the Driver Station.
 
 object TeleOp : Command() {
@@ -24,7 +24,7 @@ object TeleOp : Command() {
     val conveyorSpeed = 3.volts // todo fix voltage amount
 
     override fun initialize() {
-        addRequirements(Drivetrain, Intake, /*ToteGrabber */)
+        addRequirements(Drivetrain, Intake, ToteGrabber)
     }
     override fun execute() {
 
@@ -51,6 +51,7 @@ object TeleOp : Command() {
 //        if (OI.raiseIntake) Intake.raiseIntake()
 //        else if (OI.lowerIntake) Intake.lowerIntake()
 
+        ToteGrabber.runToteGrab((5.0 * OI.toteGrabControl).volts)
     }
 
     // operator interface
@@ -85,6 +86,8 @@ object TeleOp : Command() {
         val runIntakeDirection get() = controller.rightY   //
         val Deposit get() = controller.bButton // Both use rightY so intake and conveyor both run at once
         val lowerIntake get() = controller.yButtonPressed
+        val toteGrabControl get() = controller.rightY
+
         val raiseIntake get() = controller.aButtonPressed
     }
 }
