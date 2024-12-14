@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 
 object Intake : SubsystemBase() {
 
-    val intakeMotor   = CANSparkMax(14,MotorType.kBrushed) // confirmed, 775 brushed motor
+    val intakeMotor   = CANSparkMax(21,MotorType.kBrushed) // confirmed, 775 brushed motor
     val conveyorMotor = CANSparkMax(23,MotorType.kBrushed) // confirmed, 775 brushed motor
     val leftIntakeSolonoid = Solenoid(PneumaticsModuleType.CTREPCM, 0) // todo, fix channel
     val rightIntakeSolonoid = Solenoid(PneumaticsModuleType.CTREPCM, 1) // todo, fix channel

@@ -11,7 +11,7 @@ import com.revrobotics.SparkLimitSwitch;
 
 object ToteGrabber : SubsystemBase() {
 
-    private val armMotor = CANSparkMax(13, CANSparkLowLevel.MotorType.kBrushed) // Verified, 775 brushed
+    private val armMotor = CANSparkMax(14, CANSparkLowLevel.MotorType.kBrushed) // Verified, 775 brushed
     private val forwardSwitch = armMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed) // TODO Not verified- limit switches may be the other way around and they may be normally open instead of NC
     private val reverseSwitch = armMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed)
 
