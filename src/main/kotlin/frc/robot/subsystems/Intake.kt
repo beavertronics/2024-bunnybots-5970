@@ -24,11 +24,11 @@ object Intake : SubsystemBase() {
     }
 
     fun runIntake(speed: VoltageUnit) {
-        intakeMotor.setVoltage(speed)
+        intakeMotor.setVoltage(speed.asVolts)
     }
 
     fun runConveyor(speed: VoltageUnit) {
-        conveyorMotor.setVoltage(speed)
+        conveyorMotor.setVoltage(speed.asVolts)
     }
 
     fun raiseIntake() {
