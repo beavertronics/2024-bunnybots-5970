@@ -22,11 +22,13 @@ object DriveConstants {
     const val MotorLSubID = 30
     const val MotorRMainID = 22
     const val MotorRSubID = 24
+    /* not currently in use 
     const val KP = 0.0 // todo
     const val KS = 0.0 // todo
     const val KD = 0.0 // todo
     const val KV = 0.0 // todo
     const val KA = 0.0 // todo
+    */
     const val CurrentLimit = 40
 }
 object Drivetrain : SubsystemBase() {
@@ -36,14 +38,7 @@ object Drivetrain : SubsystemBase() {
     private val      rightMain = CANSparkMax(DriveConstants.MotorRMainID, CANSparkLowLevel.MotorType.kBrushless)
     private val rightSecondary = CANSparkMax(DriveConstants.MotorRSubID,  CANSparkLowLevel.MotorType.kBrushless)
 
-    val    leftEncoder: RelativeEncoder = leftMain.encoder
-    val   rightEncoder: RelativeEncoder = rightMain.encoder
-
     private val drive = DifferentialDrive(leftMain, rightMain)
-
-    private val leftPid = PIDController(DriveConstants.KP, 0.0, DriveConstants.KD)
-    private val rightPid = PIDController(DriveConstants.KP, 0.0, DriveConstants.KD)
-    private val FeedForward = SimpleMotorFeedforward(DriveConstants.KS, DriveConstants.KV, DriveConstants.KA)
 
     private fun allMotors(code: CANSparkMax.() -> Unit) { //Run a piece of code for each drive motor controller.
         for (motor in listOf(leftMain, rightMain, leftSecondary, rightSecondary)) {
@@ -93,10 +88,25 @@ object Drivetrain : SubsystemBase() {
     fun stop(){
         rawDrive(0.0,0.0)
     }
-    /** Drive by setting left and right speed, in M/s, using PID and FeedForward to correct for errors.
+
+    // Drive the drivetrain at a specified voltage for specified amount of time.
+    fun driveSeconds(left : VoltageUnit, right : VoltageUnit, secs: Double) 
+    = Commands.run({Drivetrain.tankDrive(left.asVolts,right.asVolts)}, Drivetrain)
+        .withTimeout(secs)
+
+    /* not currently in use
+
+    val    leftEncoder: RelativeEncoder = leftMain.encoder
+    val   rightEncoder: RelativeEncoder = rightMain.encoder
+    
+    private val leftPid = PIDController(DriveConstants.KP, 0.0, DriveConstants.KD)
+    private val rightPid = PIDController(DriveConstants.KP, 0.0, DriveConstants.KD)
+    private val FeedForward = SimpleMotorFeedforward(DriveConstants.KS, DriveConstants.KV, DriveConstants.KA)
+
+    * Drive by setting left and right speed, in M/s, using PID and FeedForward to correct for errors.
      * @param left Desired speed for the left motors, in M/s
      * @param right Desired speed for the right motors, in M/s
-     */
+     *
     fun closedLoopDrive(left: Double, right: Double) {
         leftPid.setpoint = left
         rightPid.setpoint = right
@@ -109,10 +119,10 @@ object Drivetrain : SubsystemBase() {
 
         rawDrive(lPidCalculated+lFFCalculated, rPidCalculated + rFFCalculated )
     }
-    /** Drive by setting left and right speed, in M/s, using PID and FeedForward to correct for errors.
+    * Drive by setting left and right speed, in M/s, using PID and FeedForward to correct for errors.
      * @param left Desired speed for the left motors, in M/s
      * @param right Desired speed for the right motors, in M/s
-     */
+     *
     fun closedLoopDrive(left: VelocityUnit, right: VelocityUnit) { closedLoopDrive(left.asMetersPerSecond, right.asMetersPerSecond) }
     fun closedLoopDrive(speeds: ChassisSpeeds){
         val kinematics = DifferentialDriveKinematics(OdometryConstants.TrackWidth.asMeters)
@@ -122,11 +132,7 @@ object Drivetrain : SubsystemBase() {
     val consumeDrive: (ChassisSpeeds) -> Unit = {
         closedLoopDrive(it)
     }
-
-    // Drive the drivetrain at a specified voltage for specified amount of time.
-    fun driveSeconds(left : VoltageUnit, right : VoltageUnit, secs: Double) 
-    = Commands.run({Drivetrain.tankDrive(left.asVolts,right.asVolts)}, Drivetrain)
-        .withTimeout(secs)
-
-
+    
+    End not currently set up
+    */
 }
