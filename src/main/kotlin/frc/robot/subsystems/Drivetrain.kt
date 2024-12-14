@@ -18,7 +18,7 @@ import beaverlib.utils.Units.Electrical.VoltageUnit
 import edu.wpi.first.wpilibj2.command.Commands
 
 object DriveConstants {
-    const val MotorLMainID = 29
+    const val MotorLMainID = 29 //Confirmed correct
     const val MotorLSubID = 30
     const val MotorRMainID = 22
     const val MotorRSubID = 24
@@ -33,7 +33,7 @@ object DriveConstants {
 }
 object Drivetrain : SubsystemBase() {
 
-    private val       leftMain = CANSparkMax(DriveConstants.MotorLMainID, CANSparkLowLevel.MotorType.kBrushless)
+    private val       leftMain = CANSparkMax(DriveConstants.MotorLMainID, CANSparkLowLevel.MotorType.kBrushless) //Confirmed correct
     private val  leftSecondary = CANSparkMax(DriveConstants.MotorLSubID,  CANSparkLowLevel.MotorType.kBrushless)
     private val      rightMain = CANSparkMax(DriveConstants.MotorRMainID, CANSparkLowLevel.MotorType.kBrushless)
     private val rightSecondary = CANSparkMax(DriveConstants.MotorRSubID,  CANSparkLowLevel.MotorType.kBrushless)
@@ -53,7 +53,6 @@ object Drivetrain : SubsystemBase() {
         allMotors {
             restoreFactoryDefaults()
             setSmartCurrentLimit(DriveConstants.CurrentLimit) //Todo: there's a fancy version of this function that may be worth using
-            //TODO: finish initialize spark maxes
         }
 
         drive.setDeadband(0.0)
@@ -61,13 +60,8 @@ object Drivetrain : SubsystemBase() {
         leftMain.inverted = true
         leftSecondary.inverted = true
 
-        /* TODO: set motor inversion correctly
-        leftMain.inverted = false
-        leftSecondary.inverted = false
-        rightMain.inverted = true
-        rightSecondary.inverted = true
-        */
-        //setDefaultCommand(Commands.run({stop()})) //Don't move unless we tell you to.
+        rightMain.inverted = false
+        rightSecondary.inverted = false
     }
     /** Drive by setting left and right power (-1 to 1).
      * @param left Power for left motors [-1.0.. 1.0]. Forward is positive.
