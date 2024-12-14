@@ -19,10 +19,6 @@ import frc.robot.subsystems.ToteGrabber
 //TeleOp Code - Controls the robot based off of inputs from the humans operating the Driver Station.
 
 object TeleOp : Command() {
-
-    val intakeSpeed = 3.volts   // todo fix voltage amount
-    val conveyorSpeed = 3.volts // todo fix voltage amount
-
     override fun initialize() {
         addRequirements(Drivetrain, Intake, ToteGrabber)
     }
@@ -36,21 +32,17 @@ object TeleOp : Command() {
         else Drivetrain.tankDrive(OI.leftSideDrive * power, OI.rightSideDrive* power)
 
         //===== SUBSYSTEMS =====//
-         //run intake in one direction or the other
-        if (OI.runIntakeDirection.absoluteValue > 0.01) {
-            if(OI.runIntakeDirection < 0) {
-                Intake.runConveyor(conveyorSpeed * 0.25)
-                Intake.runIntake(intakeSpeed)
-            }
-            else if(OI.runIntakeDirection > 0) Intake.runConveyor(-conveyorSpeed * OI.runIntakeDirection)
-        } //Run the intake at the correct speed and in the correct direction
-        if (OI.Deposit) Intake.runConveyor(conveyorSpeed)
-//
-//        // move intake up and down if button pressed
-//        // if both buttons are pressed, intake will be raised.
-//        if (OI.raiseIntake) Intake.raiseIntake()
-//        else if (OI.lowerIntake) Intake.lowerIntake()
+        if (OI.conveyorForward) {
+            Intake.runConveyor(5.volts)
+        } else if (OI.conveyorBackward){
+            Intake.runConveyor(-5.volts)
+        }
 
+        Intake.runIntake((OI.intakeControl * 5.0).volts)
+
+        if (OI.raiseIntake) Intake.raiseIntake()
+        else if (OI.lowerIntake) Intake.lowerIntake()
+        
         ToteGrabber.runToteGrab((5.0 * OI.toteGrabControl).volts)
     }
 
@@ -83,12 +75,14 @@ object TeleOp : Command() {
         val quickReverse get() = rightJoystick.triggerPressed
 
         //Subsystems
-        val runIntakeDirection get() = controller.rightY   //
-        val Deposit get() = controller.bButton // Both use rightY so intake and conveyor both run at once
-        val lowerIntake get() = controller.yButtonPressed
+        val intakeControl get() = controller.leftY
+        val conveyorForward get() = controller.leftTriggerAxis > 0.1
+        val conveyorBackward get() = controller.leftBumper
+
         val toteGrabControl get() = controller.rightY
 
         val raiseIntake get() = controller.aButtonPressed
+        val lowerIntake get() = controller.yButtonPressed
     }
 }
 
