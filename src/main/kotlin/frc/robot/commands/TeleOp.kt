@@ -34,6 +34,8 @@ object TeleOp : Command() {
             Intake.runConveyor(5.volts)
         } else if (OI.conveyorBackward){
             Intake.runConveyor(-5.volts)
+        } else {
+            Intake.runConveyor(0.volts)
         }
 
         Intake.runIntake((OI.intakeControl * 5.0).volts)
@@ -65,6 +67,8 @@ object TeleOp : Command() {
             return this.absoluteValue > target
         }
 
+        // :)
+        
         // ROBOT CONTROL BINDINGS!
         /*
         General gist of control scheme
